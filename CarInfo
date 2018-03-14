@@ -1,0 +1,478 @@
+/*Write a C++ program that keeps information about cars. A car will have the attributes license
+plate, brand (such as VW, Mazda etc.), owner, model (such as Golf, Polo etc.), year of
+registration, weight, color and country of origin. Create a Car class, with getter and setter
+methods for private attributes. Have an array of Car objects for keeping car information. The
+array should be able to contain 100 cars. Initialize the array with ten cars.
+Your program should have the following menu structure:
+• Add a new car
+• Find cars owned by a person and show all the information about those cars
+• Show all cars (all the information about them)
+• Modify a car record: input the license plate number, ask the field to modify, and get the
+new value from the user. Modify the record accordingly.
+• Delete a car with a specific license plate number.
+• Read cars from a file
+• Write cars to a file
+• Quit*/
+
+# include<iostream>
+# include<stdlib.h>
+# include<fstream>
+# include<string>
+# include <cstring>
+using namespace std;
+
+int j = 9 ;  //global variable
+
+// Creating a class called Cars
+class Cars {
+	public:
+		void setlicensePlate(string lp) { licensePlate = lp;}
+		string getlicensePlate() {return licensePlate;}
+		void setbrand(string br){ brand = br;}
+		string getbrand(){return brand;}
+		void setowner(string person){ owner = person;}
+		string getowner(){return owner;}
+		void setmodel(string MO) { model = MO;}
+		string getmodel(){return model;}
+		void setregistrationYear(string YR){ registrationYear = YR;}
+		string getregistrationYear(){return registrationYear;}
+		void setweight(string wgh){ weight = wgh;}
+		string getweight(){return weight;}
+		void setcolor(string COL){ color = COL;}
+		string getcolor(){return color;}
+		void setoriginCountry(string ctry){ originCountry = ctry;}
+		string getoriginCountry(){return originCountry;}
+	
+	private:
+		string licensePlate, brand, owner, model, registrationYear, weight, color, originCountry;
+		};
+
+void initialize(Cars *car);
+void addcar(Cars *p);
+void showallcars(Cars *);
+void findbyowner(Cars *);
+void showcarinfo(Cars *p, int);
+void modify(Cars *, int);
+void modifybyLicensePlate(Cars *car);
+void deletebyLicensePlate(Cars *p);
+void deleteinfo(Cars * , int);
+void readinfoFromFile(Cars *);
+void writeinfoFromFile(Cars *);
+
+
+
+int main(){
+	
+     int i;
+     Cars car[100];
+     // Initialize the array with 10 cars
+     initialize(car);
+     cout << "What do you want to do? Enter a number to choose,\n";
+     cout << "\n1. Add a car\n2. Find a car by its owner\n3. Show the information of all cars\n4. Modify a car's information\n5. Write to a file.\n6. Read from a file\n7. Delete a car record. \n8. To quit\n" << endl;
+     cout << "Enter a number: ";
+     cin >> i;
+     
+     while(i!= 9)
+	 {
+	 	switch(i){
+	 		case 1:
+	 			addcar(car);
+	 			break;
+	 		case 2:
+	 			findbyowner(car);
+	 			break;
+	 		case 3:
+	 			showallcars(car);
+	 			break;
+	 		case 4:
+	 			modifybyLicensePlate(car);
+	 			break;
+	 		case 5:
+	 			writeinfoFromFile(car);
+	 			break;
+	 		case 6:
+	 			readinfoFromFile(car);
+	 			break;
+	 		case 7:
+	 			deletebyLicensePlate(car);
+	 			break;
+	 		case 8:
+	 			exit(0);
+	 			break;
+	 		}
+	 			
+	 cout << "\nWhat do you want to do? Enter a number to choose.";
+     cout << "\n1. Add a car\n2. Find a car by its owner\n3. Show the information of all cars\n4. Modify a car's information\n5. Write to a file.\n6. Read from a file\n7. Delete a car record.\n8.Quit ";
+     cout << "\nEnter a number: ";
+     cin >> i;	
+		 }
+     system("pause");
+	return 0;
+}
+
+// function to add car
+void addcar(Cars *p)
+{
+	++j;
+	string car_lp, car_brand, human, car_model, car_color, car_weight, year, country;
+	cout << "\nEnter Owner: ";
+	getchar();
+	getline(cin, human);
+	cout << "Enter Car Brand: ";
+	cin >> car_brand;
+	cout << "Enter License Plate: ";
+	cin >> car_lp;
+	cout << "Enter Car Model: ";
+	getchar();
+	getline(cin, car_model);
+	cout << "Enter Registration Year: ";
+	cin >> year;
+	cout << "Enter Car Weight: ";
+	cin >> car_weight;
+	cout << "Enter Car Colour: ";
+	cin >> car_color;
+	cout << "Enter Origin of Car: ";
+	cin >> country;
+	
+	
+	p[j].setowner(human);
+	p[j].setbrand(car_brand);
+	p[j].setlicensePlate(car_lp);
+	p[j].setmodel(car_model);
+	p[j].setregistrationYear(year);
+	p[j].setweight(car_weight);
+	p[j].setcolor(car_color);
+	p[j].setoriginCountry(country);	
+	
+	cout << "\n Car added.\n" << endl;
+	cout << "...................................." << endl;
+	
+}
+// Function to find a car using its owner
+void findbyowner(Cars *p)
+{
+	string name;
+	cout << "\nEnter the name of the person whose car(s) you want to know: ";
+	getchar();
+	getline(cin, name);
+	for (int i = 0; i <= j; i++)
+		if (p[i].getowner() == name) {
+			showcarinfo(p, i);
+			return;
+		}
+	cout << "Person not found\n" << endl;
+	cout << "........................................." << endl;
+}
+
+//Function to show a car's information.
+void showcarinfo(Cars *p, int r)
+{
+		cout << "\nOwner: " << p[r].getowner() << endl;
+	    cout << "License Plate No:  " << p[r].getlicensePlate() << endl;
+	    cout << "Car Brand: " << p[r].getbrand() << endl;
+	    cout << "Model: " << p[r].getmodel() << endl;
+	    cout << "Registration Year: " << p[r].getregistrationYear() << endl;
+	    cout << "Weight: " << p[r].getweight() << "lbs" << endl;
+	    cout << "Color: " << p[r].getcolor() << endl;
+	    cout << "Country of origin: " << p[r].getoriginCountry() << endl;
+	    cout << "........................................................." << endl;
+}
+
+//Function to show the information of all cars.
+void showallcars(Cars *p)
+{
+	int i;
+	for (i = 0; i <= j; i++ )
+	{
+			cout << "Owner: " << p[i].getowner() << endl;
+	        cout << "License Plate No:  " << p[i].getlicensePlate() << endl;
+	        cout << "Car Brand: " << p[i].getbrand() << endl;
+	        cout << "Model: " << p[i].getmodel() << endl;
+	        cout << "Registration Year: " << p[i].getregistrationYear() << endl;
+	        cout << "Weight: " << p[i].getweight() << "lbs" << endl;
+	        cout << "Color: " << p[i].getcolor() << endl;
+	        cout << "Country of origin: " << p[i].getoriginCountry() << endl;
+	        cout << endl;
+	}
+	 cout << "..............................................."<< endl;
+}
+
+//Function to modify a car's information using its license
+void modifybyLicensePlate(Cars *p)
+{
+		string name;
+	    int count = 0;
+	    cout << "Enter the license plate of the car to modify: ";
+	    getchar();
+	    getline(cin, name);
+	    for(int i = 0; i <= j; i++)
+	    
+	    	if(p[i].getlicensePlate() == name)
+	    	{
+	    			count = 1;
+			        modify(p, i);
+			        break;
+			}
+		
+		
+	  if(count == 0)
+		    
+			 cout << "License plate not found.\n";
+		    
+		cout << endl;
+		
+	
+	
+}
+
+//Function to modify a car's information.
+void modify(Cars *p, int r)
+{
+	int i;
+	string licensePlate, brand, owner, model, registrationYear, weight, color, originCountry;
+	cout << "\nWhat do you want to modify about" << " " << p[r].getbrand() << " " << "With license plate" << " " << p[r].getlicensePlate() << endl;
+	cout << "1. For brand\n2. For owner\n3. For license plate\n4. For model\n5. For registration year\n6. For weight\n7. For color\n8. For country of origin\n9. To exit" << endl;
+	cout << "Enter the Number: ";
+	cin >> i;
+	
+	if(i !=9){
+		switch (i)
+		{
+			case 1:
+				cout << "\nEnter brand: " << endl;
+				cin >> brand;
+				p[r].setbrand(brand);
+				break;
+			case 2:
+				cout << "\nEnter owner's name: " << endl;
+				cin >> owner;
+				p[r].setowner(owner);
+				break;
+			case 3:
+				cout << "\nEnter the license plate: " << endl;
+				cin >> licensePlate;
+				p[r].setlicensePlate(licensePlate);
+				break;
+			case 4:
+				cout << "\nEnter model of the car: " << endl;
+				cin >> model;
+				p[r].setmodel(model);
+				break;
+			case 5:
+				cout << "\nEnter year of registration: " << endl;
+				cin >> registrationYear;
+				p[r].setregistrationYear(registrationYear);
+				break;
+			case 6:
+				cout << "\nEnter the weight of car: " << endl;
+				cin >> weight;
+				p[r].setweight(weight);
+				break;
+			case 7:
+				cout << "\nEnter the color of the car: " << endl;
+				cin >> color;
+				p[r].setcolor(color);
+				break;
+			case 8:
+				cout << "\nEnter the country of origin: " << endl;
+				cin >> originCountry;
+				p[r].setoriginCountry(originCountry);
+				break;
+			case 9:
+				break;
+		}
+		cout << "Modification successful\n" << endl;
+		showcarinfo(p,r);
+	}
+}
+
+//Function to delete a car using its license plate no.
+void deletebyLicensePlate(Cars *p)
+{
+	string licensePlate;
+	int del , count = 0;
+	cout << "\nEnter the license plate of the car you want to delete: " << endl;
+	cin >> licensePlate;
+	for(int i = 0; i <= j; i++)
+	{
+		if(p[i].getlicensePlate() == licensePlate)
+		{
+			    count = 1;
+				cout << "The car details:" << endl;
+				cout << "Owner: " << p[i].getowner() << endl;
+				cout << "Brand: " << p[i].getbrand() << endl;
+				cout << "License plate: " << p[i].getlicensePlate() << endl;
+				cout << "Model: " << p[i].getmodel() << endl;
+				cout << "Registration year: " << p[i].getregistrationYear() << endl;
+				cout << "Weight: " << p[i].getweight() << endl;
+				cout << "Colour: " << p[i].getcolor() << endl;
+				cout << "Country of origin: " << p[i].getcolor() << endl;
+			    cout << "Enter 1 if you want to delete.\nEnter 2 to quit.\n" << endl;
+		cin >> del;
+		        if (del == 1)
+		        {
+		        	
+		        	deleteinfo(p,i);
+		        	break;
+				}
+				else cout <<"No car was deleted.\n" << endl;
+				cout << "................................." << endl;
+			  	
+		
+			
+		}
+			
+	} 
+   if (count == 0) cout <<"License plate not found." << endl;
+	
+}
+
+//Function to delete a car's information 
+void deleteinfo(Cars *p, int r)
+{
+	for(r; r <= j; r++)
+	{
+		p[r].setowner(p[r + 1].getowner());
+		p[r].setbrand(p[r + 1].getbrand());
+		p[r].setlicensePlate(p[r + 1].getlicensePlate());
+		p[r].setmodel(p[r + 1].getmodel());
+		p[r].setregistrationYear(p[r + 1].getregistrationYear());
+		p[r].setweight(p[r + 1].getweight());
+		p[r].setcolor(p[r + 1].getcolor());
+		p[r].setoriginCountry(p[r + 1].getoriginCountry());
+	}
+	--j;
+	cout << "\nThe car has been deleted." << endl;
+	cout << "..................................................." << endl;
+	
+}
+
+//Function to write into a file
+void writeinfoFromFile(Cars *p)
+{
+	ofstream carFile;
+	carFile.open("C:\\Users\\NAOMI OKO-JAJA\\Desktop\\carInfo.txt");
+	int i;
+	for(i = 0; i<= j; i++)
+	{
+		carFile << "Owner:" << " " << p[i].getowner() << endl;
+		carFile << "Brand:" << " " << p[i].getbrand() << endl;
+		carFile << "License Plate No:" << " "<< p[i].getlicensePlate() << endl;
+		carFile << "Model:" << " " << p[i].getmodel() << endl;
+		carFile << "Registration year:" << " " << p[i].getregistrationYear() << endl;
+		carFile << "Weight:" << " " << p[i].getweight() << endl;
+		carFile << "Colour:" << " " << p[i].getcolor() << endl;
+		carFile << "Country of origin:" << " " << p[i].getoriginCountry();
+		carFile << "\n";
+		carFile << endl;	
+	}
+	cout << "\nThe information has been written to the file. " << endl;
+	cout << "...................................................................." << endl;
+}
+
+//Function to read from a file.
+void readinfoFromFile(Cars *cars)
+{
+	ifstream read;
+	string line;
+	read.open("C:\\Users\\NAOMI OKO-JAJA\\Desktop\\carInfo.txt");
+	if (read.fail())
+	{
+		cerr << "Error opening the file." << endl;
+		return;
+	}
+	cout << "\n \t          INFO FROM THE FILE       " << endl;
+	while(!read.eof())
+	{
+		getline(read,line);
+		cout << line << endl;
+	}
+	cout << "...................................................." << endl;
+}
+
+//Function to initialize the array of cars
+void initialize(Cars *car)
+{
+	car[0].setowner("Marion Cooper");
+	car[0].setbrand("BMW");
+	car[0].setlicensePlate("INE628");
+	car[0].setmodel("BMW M3");
+	car[0].setregistrationYear("2013");
+	car[0].setweight("5027");
+	car[0].setcolor("Silver");
+	car[0].setoriginCountry("Germany");
+	car[1].setowner("Brendan Cobb");
+	car[1].setbrand("Range Rover");
+	car[1].setlicensePlate("ONY874");
+	car[1].setmodel("Range Rover Evoque");
+	car[1].setregistrationYear("2016");
+	car[1].setweight("3658");
+	car[1].setcolor("Red");
+	car[1].setoriginCountry("Britain");
+	car[2].setowner("Percy Klein");
+	car[2].setbrand("Jaguar");
+	car[2].setlicensePlate("ZAL112");
+	car[2].setmodel("Jaguar xe");
+	car[2].setregistrationYear("2016");
+	car[2].setweight("4061");
+	car[2].setcolor("Yellow");
+	car[2].setoriginCountry("Britain");
+	car[3].setowner("Finlay Bauer");
+	car[3].setbrand("Mercedes Benz");
+	car[3].setlicensePlate("YES444");
+	car[3].setmodel("Mercedes - Benz G-class G550");
+	car[3].setregistrationYear("2015");
+	car[3].setweight("5578");
+	car[3].setcolor("Black");
+	car[3].setoriginCountry("Germany");
+	car[4].setowner("Kate Ross");
+	car[4].setbrand("Lexus");
+	car[4].setlicensePlate("BLG537");
+	car[4].setmodel("Lexus ES 350");
+	car[4].setregistrationYear("2014");
+	car[4].setweight("4696");
+	car[4].setcolor("pink");
+	car[4].setoriginCountry("Japan");
+	car[5].setowner("Jermaine Heath");
+	car[5].setbrand("Audi");
+	car[5].setlicensePlate("ODF914");
+	car[5].setmodel("Audi r8 Spyder");
+	car[5].setregistrationYear("2017");
+	car[5].setweight("3920");
+	car[5].setcolor("White");
+	car[5].setoriginCountry("Germany");
+	car[6].setowner("Kinsley Mason");
+	car[6].setbrand("Ferrari");
+	car[6].setlicensePlate("CHK010");
+	car[6].setmodel("Ferrari California T");
+	car[6].setregistrationYear("2015");
+	car[6].setweight("4100");
+	car[6].setcolor("Red");
+	car[6].setoriginCountry("Italy");
+	car[7].setowner("Dhruv Le");
+	car[7].setbrand("Rolls-Royce");
+	car[7].setlicensePlate("PXY158");
+	car[7].setmodel("Rolls- Royce Phantom");
+	car[7].setregistrationYear("2018");
+	car[7].setweight("5750");
+	car[7].setcolor("Grey");
+	car[7].setoriginCountry("Britain");
+	car[8].setowner("Remy Hart");
+	car[8].setbrand("Range Rover");
+	car[8].setlicensePlate("GLM991");
+	car[8].setmodel("Range Rover Sports");
+	car[8].setregistrationYear("2017");
+	car[8].setweight("4654");
+	car[8].setcolor("Silver");
+	car[8].setoriginCountry("Britain");
+	car[9].setowner("Reagan Ali");
+	car[9].setbrand("Audi");
+	car[9].setlicensePlate("QRT023");
+	car[9].setmodel("Audi Q5");
+	car[9].setregistrationYear("2015");
+	car[9].setweight("4079");
+	car[9].setcolor("Purple");
+	car[9].setoriginCountry("Germany");
+}
+
+
